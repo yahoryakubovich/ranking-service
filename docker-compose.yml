@@ -1,0 +1,21 @@
+services:
+  redis:
+    container_name: ${REDIS_CONTAINER_NAME:-ranking-redis}
+    image: ${REDIS_IMAGE:-redis:7}
+    ports:
+      - "${REDIS_EXTERNAL_PORT:-6379}:${REDIS_INTERNAL_PORT:-6379}"
+    restart: unless-stopped
+
+  ranking-service:
+    container_name: ${RANKING_SERVICE_CONTAINER_NAME:-ranking-service}
+    image: ${RANKING_SERVICE_IMAGE:-ranking-service:latest}
+    ports:
+      - "${PORT:-8000}:${PORT:-8000}"
+    environment:
+      REDIS_HOST: ${REDIS_HOST:-redis}
+      REDIS_PORT: ${REDIS_INTERNAL_PORT:-6379}
+      REDIS_DB: ${REDIS_DB:-0}
+      PORT: ${PORT:-8000}
+      WORKERS: ${WORKERS:-4}
+    depends_on:
+      - redis
