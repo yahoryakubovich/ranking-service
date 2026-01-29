@@ -11,5 +11,3 @@ exec gunicorn app.main:app \
     --workers "$WORKERS" \
     --worker-class uvicorn.workers.UvicornWorker \
     --bind "0.0.0.0:$PORT"
-
-gunicorn src.app.main:app --workers 16 --worker-class uvicorn.workers.UvicornWorker --bind "0.0.0.0:8000"
